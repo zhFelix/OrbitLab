@@ -1,0 +1,81 @@
+{
+  "G": 1.0,
+  "dt": 0.004,
+  "softening": 0.65,
+  "scene_name": "Solar System",
+  "language": "en",
+  "show_stars": true,
+  "collisions_enabled": true,
+  "show_labels": true,
+  "permanent_trails": false,
+  "bodies": [
+    {
+      "name": "Sun",
+      "kind": "star",
+      "mass": 10021.880000000005,
+      "radius": 56.03570290448761,
+      "color": [
+        250,
+        193,
+        70
+      ],
+      "x": 0.0,
+      "y": 0.0,
+      "vx": 0.0,
+      "vy": 0.0,
+      "fixed": true,
+      "primary": true
+    },
+    {
+      "name": "Uranus",
+      "kind": "planet",
+      "mass": 1.6,
+      "radius": 7.0,
+      "color": [
+        123,
+        204,
+        214
+      ],
+      "x": -218.51381479176965,
+      "y": 130.29508788640155,
+      "vx": -3.2119967909169955,
+      "vy": -5.396658978508539,
+      "fixed": false,
+      "primary": false
+    },
+    {
+      "name": "Neptune",
+      "kind": "planet",
+      "mass": 1.84,
+      "radius": 7.615773105863909,
+      "color": [
+        73,
+        117,
+        220
+      ],
+      "x": 247.52779332234172,
+      "y": 168.5851416708025,
+      "vx": -3.3113293890626507,
+      "vy": 4.6271839667788734,
+      "fixed": false,
+      "primary": false
+    },
+    {
+      "name": "Probe 1",
+      "kind": "probe",
+      "mass": 0.04,
+      "radius": 3,
+      "color": [
+        238,
+        120,
+        224
+      ],
+      "x": 6352.548656304428,
+      "y": -2994.031235967136,
+      "vx": 36.61816944312892,
+      "vy": -17.562796830160977,
+      "fixed": false,
+      "primary": false
+    }
+  ]
+}
