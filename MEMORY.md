@@ -15,26 +15,29 @@
 - 预设场景：Solar System、Binary Star、Earth-Moon、Figure-8。
 - 运行中按 `N` 会自动暂停、提示 `Paused for single step` 并推进一个物理步；暂停时继续按 `N` 单步，按 Space 恢复运行。
 - 天体数量大于 80 时清空并跳过预测；数量恢复到 80 或以下后，在下一次预测刷新时恢复计算。
-- 用户指定的 GitHub 仓库：`git@github.com:zhFelix/OrbitLab.git`。本项目使用独立 Git 仓库，`origin` 指向该地址；提交分支为 `codex/orbitlab-refactor-cr123`。
+- 用户指定的 GitHub 仓库：`git@github.com:zhFelix/OrbitLab.git`。本项目使用独立 Git 仓库，`origin` 指向该地址；当前本地分支和远程默认分支均为 `main`。
 
 ## 文件与运行
 
-- `orbitlab/main.py`：启动 `App`，保留原有 `main()` 和 KeyboardInterrupt 退出处理。
-- `orbitlab/config.py`：`CONFIG`、滑块常量、`PROBE_TYPES`、`SCENE_LOCALIZED`、`TEXT`，以及 `BASE_DIR`、`PREFS_PATH`、`SCENE_PATH`。
-- `orbitlab/bodies.py`：`Body`、四个场景工厂及 `SCENE_FACTORIES`。
-- `orbitlab/physics.py`：完整 `Physics` 类。
-- `orbitlab/camera.py`：完整 `Camera` 类，仅依赖 Pygame 和 future annotations。
-- `orbitlab/app.py`：完整 `App` 类，包含所有应用状态、交互、UI 和渲染。
+- 发布目录已扁平化：六个 Python 模块与 README、许可证及依赖声明均位于仓库根目录，不再套一层 `orbitlab/` 子目录。
+- `main.py`：启动 `App`，保留原有 `main()` 和 KeyboardInterrupt 退出处理。
+- `config.py`：`CONFIG`、滑块常量、`PROBE_TYPES`、`SCENE_LOCALIZED`、`TEXT`，以及 `BASE_DIR`、`PREFS_PATH`、`SCENE_PATH`。
+- `bodies.py`：`Body`、四个场景工厂及 `SCENE_FACTORIES`。
+- `physics.py`：完整 `Physics` 类。
+- `camera.py`：完整 `Camera` 类，仅依赖 Pygame 和 future annotations。
+- `app.py`：完整 `App` 类，包含所有应用状态、交互、UI 和渲染。
 - 项目模块依赖严格单向：`main → app → {physics, camera, config, bodies}`，`physics → {bodies, config}`，`bodies → config`；不允许循环导入。
 - 原单文件 `orbitlab.py` 已移除，避免遗留重复定义。
 - `requirements.txt`：当前声明依赖 `pygame>=2.5`。
 - `README.md`：安装、启动与交互操作说明。
-- `orbitlab/prefs.json`：默认持久化界面与模拟偏好的位置。
-- `orbitlab/scene.json`：默认保存场景快照的位置，不应将其天体列表视作默认预设。
+- `LICENSE`：从 https://choosealicense.com/licenses/mit/ 获取 MIT 全文，版权署名为 `2026 zhFelix`。
+- `screenshot.png`：发布用真实 Pygame F12 截图，太阳系、9 个天体、地球选中且显示预测轨迹；README 引用该文件。
+- `prefs.json`：在脚本目录生成的界面与模拟偏好，已取消 Git 跟踪并忽略。
+- `scene.json`：在脚本目录生成的场景快照，已取消 Git 跟踪并忽略；发布验证的临时存档已删除。
 - 安装依赖：`python -m pip install -r requirements.txt`。
-- 启动：在项目根目录执行 `cd orbitlab`，然后 `python main.py`。
-- 偏好、场景和截图的默认路径固定为 `Path(__file__).resolve().parent`（在 `config.py` 中定义，即 `orbitlab/` 目录），不受启动时工作目录影响；可从任意目录运行 `python /absolute/path/to/orbitlab/main.py`。
-- 保存和加载方法仍接受显式 `path` 参数。根目录原有 JSON 文件未移动、未修改，也没有自动迁移到新的默认位置。
+- 启动：在项目根目录执行 `python main.py`。
+- 偏好、场景和截图的默认路径固定为 `Path(__file__).resolve().parent`（在 `config.py` 中定义，即当前仓库根目录），不受启动时工作目录影响；可从任意目录运行 `python /absolute/path/to/OrbitLab/main.py`。
+- 保存和加载方法仍接受显式 `path` 参数。原有偏好已保留；原有场景在发布前已备份到工作区外，再按用户要求清理本地场景存档。时间戳截图被忽略，发布截图 `screenshot.png` 明确纳入版本控制。
 
 ## 验证状态与待办
 
@@ -44,9 +47,21 @@
 - 本轮 CR-1～CR-3 通过精确源码差异检查、六模块编译和依赖图检查；其余四个 Python 模块与修改前逐字节一致。
 - 本轮 SDL dummy 验证通过：`N` 自动暂停且仅推进一步、再次单步和 Space 恢复；101/81 个天体不创建预测模拟，80/79 个天体在更新中恢复预测；无选中时清空预测。
 - 本轮在临时副本和不同工作目录验证了默认文件路径、显式路径参数、四场景切换、天体质量编辑、存档往返、中英文切换、设置重启保持及渲染；另直接执行 `python /absolute/path/main.py`，注入 N/Ctrl+S/F12/退出事件，确认偏好、存档和截图均生成在脚本目录，退出码为 0。未修改用户的 JSON 或截图文件，未实测原生窗口帧率。
+- 发布检查通过：六模块编译正常；五个模块与发布前逐字节一致，`main.py` 仅修正文档中的旧启动命令。`.gitignore` 和 `requirements.txt` 与用户提供的内容一致。
+- 发布截图通过实际 `python main.py`、原生 Cocoa 显示驱动生成。用临时测试钩子投递应用事件以选择地球、等待预测刷新、触发 F12 和正常退出；截图包含 2511 个预测点，已打开图片核验。测试钩子未写入项目源文件。
+- CR-3 发布验证通过：从 `/tmp` 启动根目录 `main.py`，投递 Ctrl+S 和正常退出事件，确认 `prefs.json` 与 `scene.json` 均写入脚本目录，`/tmp` 对应文件未新增或改变；随后删除临时 `scene.json`，原有偏好内容保持一致。
+- 可选 GitHub Release 页面未创建：当前 GitHub CLI 账号 `smartdiana` 对 `zhFelix/OrbitLab` 只有 READ 权限；Git SSH 推送通道可正常使用。
 - 当前没有用户明确提出但尚未完成的功能需求。
 
 ## 最近变更
+
+### 2026-10-17：v1.0 发布整理
+
+- 按用户要求将六模块移至仓库根目录，运行逻辑不变；启动命令统一为 `python main.py`。
+- 添加 MIT 许可证与实际运行截图；更新 README 的目录树、图片引用、保存路径、主天体删除和长轨迹说明。
+- `.gitignore` 按用户指定内容更新；取消跟踪偏好与场景 JSON，保留明确用于 README 的 `screenshot.png`。
+- 发布提交信息为 `v1.0: modular release`，使用带说明的标签 `v1.0`，标签说明为 `OrbitLab v1.0`；目标远程分支为 `origin/main`。
+- 已完成上述源码、原生截图、跨目录保存和忽略规则验证，项目记忆同步更新。发布后的分支及标签状态以 Git 远程核验为准。
 
 ### 2026-10-17：首次 Git 提交
 

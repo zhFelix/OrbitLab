@@ -3,7 +3,7 @@
 OrbitLab - a small 2D solar-system sandbox built with Pygame.
 
 Run with:
-    python orbitlab.py
+    python main.py
 
 Controls:
     Space       pause / resume

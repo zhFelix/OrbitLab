@@ -2,29 +2,54 @@
 
 2D solar-system orbital sandbox implemented with Python and Pygame. It uses a softened Newtonian N-body model and Velocity Verlet integration.
 
+![Solar System with Earth selected and its predicted trajectory](screenshot.png)
+
 ## Run
 
 ```bash
 python -m pip install -r requirements.txt
-cd orbitlab
 python main.py
 ```
 
-Preferences, scene files, and screenshots default to the `orbitlab/` directory
-beside `config.py`, regardless of the current working directory. You can also
-launch the app with `python /absolute/path/to/orbitlab/main.py`.
+Run these commands from the repository root. Preferences, scene files, and
+screenshots default to this directory beside `config.py`, regardless of the
+current working directory. You can also launch the app from another directory
+with `python /absolute/path/to/OrbitLab/main.py`.
 
-The code is split into six modules: `main.py` launches the app, `config.py`
-defines shared configuration, `bodies.py` defines bodies and scene presets,
-`physics.py` handles simulation, `camera.py` handles coordinate transforms,
-and `app.py` contains the complete application interface and event loop.
+F12 saves an image named `orbitlab_YYYYMMDD_HHMMSS.png` beside the scripts.
+The image shown above is a captured F12 screenshot renamed to `screenshot.png`
+for this release. Generated preferences, scene saves, and timestamped screenshots
+are ignored by Git.
+
+## Project structure
+
+```text
+OrbitLab/
+├── .gitignore
+├── AGENTS.md          # Project collaboration rules
+├── MEMORY.md          # Project state and verification history
+├── LICENSE
+├── README.md
+├── requirements.txt
+├── screenshot.png
+├── main.py            # Application entry point
+├── config.py          # Shared configuration, text, and file paths
+├── bodies.py          # Body dataclass and scene factories
+├── physics.py         # N-body simulation, energy, and collisions
+├── camera.py          # Coordinate transforms and zoom
+└── app.py             # Application state, events, UI, and rendering
+```
+
+Dependencies remain one-way: `main → app → {physics, camera, config, bodies}`,
+`physics → {bodies, config}`, and `bodies → config`. `camera` only depends on
+Pygame. `App` remains a single class.
 
 ## Controls
 
 - `Space`: pause / resume
 - `R`: reset
 - `T`: toggle trails
-- `Always trails`: keep the complete trail history visible until the scene is reset
+- `Always trails`: keep a longer trail history, trimming older points when the limit is reached
 - `F`: follow the selected body with the camera
 - `L`: toggle labels; `C` or the Scene button cycles presets
 - `N`: pause if running, then advance one physics step
@@ -45,8 +70,8 @@ Open `Settings` in the upper-right panel to switch between English and
 Chinese, toggle the starfield, enable or disable collision merging, or restore
 default preferences.
 
-The `Delete` button beside the scene selector removes the selected body. The
-Sun is protected from deletion.
+The `Delete` button beside the scene selector removes the selected body.
+Primary bodies can also be deleted; the notification includes `(primary)`.
 
 The panel also reports kinetic energy, potential energy, total energy, and
 relative energy drift. Bodies merge on contact while conserving mass and
@@ -57,3 +82,7 @@ clicking the Scene button opens a direct selection menu.
 Selecting a body also shows a cached dashed trajectory prediction and basic
 two-body orbital elements. Prediction is skipped when there are more than
 80 bodies and resumes on the next prediction refresh at 80 or fewer.
+
+## License
+
+MIT License. Copyright (c) 2026 zhFelix. See [LICENSE](LICENSE).
